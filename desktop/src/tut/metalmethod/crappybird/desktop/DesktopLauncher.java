@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.title = "Crappy Bird";
 		config.width = 272;
 		config.height = 408;
+
 		new LwjglApplication(new CrappyBirdGame(), config);
 	}
 }
