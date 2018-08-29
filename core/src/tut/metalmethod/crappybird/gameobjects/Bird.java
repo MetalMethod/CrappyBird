@@ -1,6 +1,8 @@
 package tut.metalmethod.crappybird.gameobjects;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import tut.metalmethod.crappybird.helpers.AssetLoader;
 
 /**
  * Bird Animation:
@@ -24,12 +26,24 @@ public class Bird {
     private int width;
     private int height;
 
+    /**
+     * Object for collision detection
+     */
+    private Circle boundingCircle;
+
+    private boolean isAlive;
+
+
     public Bird(float x, float y, int width, int height) {
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 460);
+
+        boundingCircle = new Circle();
+
+        isAlive = true;
     }
 
     /**
@@ -46,6 +60,9 @@ public class Bird {
 
         position.add(velocity.cpy().scl(delta));
 
+        boundingCircle.set(position.x + 9, position.y +6, 6.5f);
+
+
         // Rotate counterclockwise
         if (velocity.y < 0) {
             rotation -= 600 * delta;
@@ -56,7 +73,7 @@ public class Bird {
         }
 
         // Rotate clockwise
-        if (isFalling()) {
+        if (isFalling() || !isAlive) {
             rotation += 480 * delta;
             if (rotation > 90) {
                 rotation = 90;
@@ -68,7 +85,10 @@ public class Bird {
      * Called when the sceen is clicked or touched
      */
     public void onClick() {
-        velocity.y = -140;
+        if (isAlive) {
+            AssetLoader.flap.play();
+            velocity.y = -140;
+        }
     }
 
     /**
@@ -86,7 +106,20 @@ public class Bird {
      * @return
      */
     public boolean shouldNotFlap() {
-        return velocity.y > 70;
+        return velocity.y > 70 || !isAlive;
+    }
+
+    public void die(){
+        isAlive = false;
+        velocity.y = 0;
+    }
+
+    /**
+     * The bird to stop accelerating downwards once it is dead.
+     */
+    public void decelerate(){
+
+        acceleration.y = 0;
     }
 
 
@@ -110,5 +143,15 @@ public class Bird {
         return rotation;
     }
 
+    /**
+     *  Gets the collision object
+     * @return
+     */
+    public Circle getBoundingCircle() {
+        return boundingCircle;
+    }
 
+    public boolean isAlive() {
+        return isAlive;
+    }
 }
