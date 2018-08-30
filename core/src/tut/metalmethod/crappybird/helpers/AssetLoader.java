@@ -2,6 +2,7 @@ package tut.metalmethod.crappybird.helpers;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -31,6 +32,8 @@ public class AssetLoader {
     public static Sound dead;
     public static Sound flap;
     public static Sound coin;
+
+    public static Preferences prefs;
 
     public static void load() {
         texture = new Texture(Gdx.files.internal("data/texture.png"));
@@ -80,6 +83,14 @@ public class AssetLoader {
         dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
         flap = Gdx.audio.newSound(Gdx.files.internal("data/flap.wav"));
         coin = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
+
+        //HighScore
+        // Create or retrieve preferences file
+        prefs = Gdx.app.getPreferences("CrappyBird");
+        //provide default highsocre
+        if(!prefs.contains("highscore")) {
+            prefs.putInteger("highscore", 0);
+        }
     }
 
     public static void dispose() {
@@ -89,6 +100,17 @@ public class AssetLoader {
         dead.dispose();
         flap.dispose();
         coin.dispose();
+    }
+
+    // Receives an integer and maps it to the String highScore in prefs
+    public static void setHighScore(int val) {
+        prefs.putInteger("highScore", val);
+        prefs.flush();
+    }
+
+    // Retrieves the current high score
+    public static int getHighScore() {
+        return prefs.getInteger("highScore");
     }
 
 }

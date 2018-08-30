@@ -51,9 +51,12 @@ public class GameWorld {
                 break;
 
             case RUNNING:
-            default:
                 updateRunning(delta);
                 break;
+
+            default:
+                break;
+
         }
     }
 
@@ -80,6 +83,11 @@ public class GameWorld {
             bird.die();
             bird.decelerate();
             currentState = GameState.GAMEOVER;
+
+            if (score > AssetLoader.getHighScore()) {
+                AssetLoader.setHighScore(score);
+                currentState = GameState.HIGHSCORE;
+            }
         }
     }
 
@@ -103,15 +111,15 @@ public class GameWorld {
         score += increment;
     }
 
-    public boolean isReady(){
+    public boolean isReady() {
         return currentState == GameState.READY;
     }
 
-    public void start(){
+    public void start() {
         currentState = GameState.RUNNING;
     }
 
-    public void restart(){
+    public void restart() {
         currentState = GameState.READY;
         score = 0;
         bird.onRestart(midPointY - 5);
@@ -119,7 +127,11 @@ public class GameWorld {
         currentState = GameState.READY;
     }
 
-    public boolean isGameOver(){
+    public boolean isGameOver() {
         return currentState == GameState.GAMEOVER;
+    }
+
+    public boolean isHighScore() {
+        return currentState == GameState.HIGHSCORE;
     }
 }
