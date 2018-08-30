@@ -52,7 +52,8 @@ public class GameRenderer {
     private Pipe pipe1, pipe2, pipe3;
 
     /**
-     *  Constructor of Game Renderer
+     * Constructor of Game Renderer
+     *
      * @param gameWorld
      * @param gameHeight
      * @param midPointY
@@ -76,7 +77,7 @@ public class GameRenderer {
         initAssets();
     }
 
-    private void initGameObjects(){
+    private void initGameObjects() {
         bird = gameWorld.getBird();
         scrollHandler = gameWorld.getScrollHandler();
 
@@ -87,7 +88,7 @@ public class GameRenderer {
         pipe3 = scrollHandler.getPipe3();
     }
 
-    private void initAssets(){
+    private void initAssets() {
         bg = AssetLoader.bg;
         grass = AssetLoader.grass;
         birdAnimation = AssetLoader.birdAnimation;
@@ -147,8 +148,9 @@ public class GameRenderer {
     }
 
     /**
-     *  runTime is reponsible to determine which frame the bird animation should display.
-     *  The Animation object will use this value (and the frame duration) to determine which TextureRegion to display.
+     * runTime is reponsible to determine which frame the bird animation should display.
+     * The Animation object will use this value (and the frame duration) to determine which TextureRegion to display.
+     *
      * @param runTime
      */
     public void render(float runTime) {
@@ -161,21 +163,22 @@ public class GameRenderer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         // Draw Background color
-        shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
+        shapeRenderer.setColor(128 / 255.0f, 128 / 255.0f, 128 / 255.0f, 1);
         shapeRenderer.rect(0, 0, 136, midPointY + 66);
 
         // Draw Grass
-        shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
+        shapeRenderer.setColor(45 / 255.0f, 45 / 255.0f, 45 / 255.0f, 1);
         shapeRenderer.rect(0, midPointY + 66, 136, 11);
 
         // Draw Dirt
-        shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
+        shapeRenderer.setColor(27 / 255.0f, 27 / 255.0f, 27 / 255.0f, 1);
         shapeRenderer.rect(0, midPointY + 77, 136, 52);
 
         // End ShapeRenderer
         shapeRenderer.end();
 
         // Begin SpriteBatch
+
         batcher.begin();
         // Disable transparency
         // This is good for performance when drawing images that do not require
@@ -216,11 +219,38 @@ public class GameRenderer {
                     bird.getRotation());
         }
 
-        // End SpriteBatch
+
+        if (gameWorld.isReady()) {
+            // Draw shadow first
+            AssetLoader.shadow.draw(batcher, "Touch me", (136 / 2)
+                    - (42), 76);
+            // Draw text
+            AssetLoader.font.draw(batcher, "Touch me", (136 / 2)
+                    - (42 - 1), 75);
+        } else {
+
+            if (gameWorld.isGameOver()) {
+                AssetLoader.shadow.draw(batcher, "Game Over", 25, 56);
+                AssetLoader.font.draw(batcher, "Game Over", 24, 55);
+
+                AssetLoader.shadow.draw(batcher, "Try again?", 23, 76);
+                AssetLoader.font.draw(batcher, "Try again?", 24, 75);
+            }
+
+            // Convert integer into String
+            String score = gameWorld.getScore() + "";
+
+            // Draw shadow first
+            AssetLoader.shadow.draw(batcher, "" + gameWorld.getScore(), (136 / 2) - (3 * score.length()), 12);
+            // Draw text
+            AssetLoader.font.draw(batcher, "" + gameWorld.getScore(), (136 / 2) - (3 * score.length() - 1), 11);
+
+            // End SpriteBatch
+        }
         batcher.end();
     }
 
-    private void drawDebugCollisionObjects(){
+    private void drawDebugCollisionObjects() {
         /**
          * temp code for view collision logic in  character
          */

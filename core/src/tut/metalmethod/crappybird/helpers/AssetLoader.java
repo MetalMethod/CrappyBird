@@ -72,9 +72,9 @@ public class AssetLoader {
 
         //Loads bitmap fonts
         font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
-//        font.setScale(0.25f, -0.25f);
+        font.getData().setScale(0.25f, -0.25f);
         shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
-//        shadow.setScale(.25f, -.25f);
+        shadow.getData().setScale(.25f, -.25f);
 
         // Sound Fx
         dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));

@@ -60,8 +60,15 @@ public class Bird {
 
         position.add(velocity.cpy().scl(delta));
 
-        boundingCircle.set(position.x + 9, position.y +6, 6.5f);
+        // Set the circle's center to be (9, 6) with respect to the bird.
+        // Set the circle's radius to be 6.5f;
+        boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
 
+        // CEILING CHECK
+        if (position.y < -13) {
+            position.y = -13;
+            velocity.y = 0;
+        }
 
         // Rotate counterclockwise
         if (velocity.y < 0) {
@@ -109,7 +116,7 @@ public class Bird {
         return velocity.y > 70 || !isAlive;
     }
 
-    public void die(){
+    public void die() {
         isAlive = false;
         velocity.y = 0;
     }
@@ -117,8 +124,7 @@ public class Bird {
     /**
      * The bird to stop accelerating downwards once it is dead.
      */
-    public void decelerate(){
-
+    public void decelerate() {
         acceleration.y = 0;
     }
 
@@ -144,7 +150,8 @@ public class Bird {
     }
 
     /**
-     *  Gets the collision object
+     * Gets the collision object
+     *
      * @return
      */
     public Circle getBoundingCircle() {
@@ -153,5 +160,15 @@ public class Bird {
 
     public boolean isAlive() {
         return isAlive;
+    }
+
+    public void onRestart(int y) {
+        rotation = 0;
+        position.y = y;
+        velocity.x = 0;
+        velocity.y = 0;
+        acceleration.x = 0;
+        acceleration.y = 460;
+        isAlive = true;
     }
 }
