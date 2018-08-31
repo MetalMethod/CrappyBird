@@ -1,4 +1,7 @@
 # CrappyBird
+Play the game online here:
+[https://metalmethod.github.io/CrappyBird/](https://metalmethod.github.io/CrappyBird/)
+
 Flappy Bird clone for fun and to practice Java and learn the libGDX framework.
 
 ![alt text](screenshots.png)
